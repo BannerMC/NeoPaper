@@ -33,7 +33,7 @@ if (!file(".git").exists()) {
 
 rootProject.name = "paper"
 
-for (name in listOf("paper-api", "paper-server")) {
+for (name in listOf("paper-api", "paper-server", "paperclip", "paperclip:java17", "fabric-loader", "fabric-loader:minecraft", "fabric-loader:junit")) {
     include(name)
     file(name).mkdirs()
 }
