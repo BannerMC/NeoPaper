@@ -152,7 +152,7 @@ public class MinecraftGameProvider implements GameProvider {
 
 	@Override
 	public boolean isObfuscated() {
-		return false; // generally no...
+		return true; // generally no...
 	}
 
 	@Override
