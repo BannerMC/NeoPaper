@@ -22,6 +22,7 @@ public final class Paperclip {
 
     public static Collection<URL> versions; // Banner
 
+    @SuppressWarnings("all")
     public static void main(final String[] args) {
         if (Path.of("").toAbsolutePath().toString().contains("!")) {
             System.err.println("Paperclip may not run in a directory containing '!'. Please rename the affected folder.");
@@ -41,11 +42,13 @@ public final class Paperclip {
         final Thread runThread = new Thread(() -> {
             try {
                 // Banner start
-                Class<?> fabricLoaderMain = classLoader.loadClass(launchData.mainClass());
+                Class<?> fabricLoaderMain = Class.forName(launchData.mainClass(), true, classLoader);
                 // Launches FabricLoader
-                final MethodHandle handle = MethodHandles.publicLookup().findStatic(fabricLoaderMain, "main", MethodType.methodType(void.class, String[].class));
+                final MethodHandle handle = MethodHandles.lookup()
+                    .findStatic(fabricLoaderMain, "main", MethodType.methodType(void.class, String[].class))
+                    .asFixedArity();
                 // Banner end
-                handle.invokeExact(args);
+                handle.invokeExact((String[])args);
                 /*
                 final Class<?> mainClass = Class.forName(mainClassName, true, classLoader);
                 final MethodHandle mainHandle = MethodHandles.lookup()
