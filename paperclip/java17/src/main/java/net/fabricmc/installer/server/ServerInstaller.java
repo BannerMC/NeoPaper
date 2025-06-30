@@ -1,5 +1,3 @@
-package net.fabricmc.installer.server;
-
 /*
  * Copyright (c) 2016, 2017, 2018, 2019 FabricMC
  *
@@ -15,6 +13,8 @@ package net.fabricmc.installer.server;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+package net.fabricmc.installer.server;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -48,6 +48,7 @@ import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
 import mjson.Json;
+
 import net.fabricmc.installer.LoaderVersion;
 import net.fabricmc.installer.util.FabricService;
 import net.fabricmc.installer.util.InstallerProgress;
@@ -58,7 +59,7 @@ public class ServerInstaller {
     private static final String servicesDir = "META-INF/services/";
     private static final String manifestPath = "META-INF/MANIFEST.MF";
     public static final String DEFAULT_LAUNCH_JAR_NAME = "fabric-server-launch.jar";
-    private static final Pattern SIGNATURE_FILE_PATTERN = Pattern.compile("META-INF/[^/]\\.(SF|DSA|RSA|EC)");
+    private static final Pattern SIGNATURE_FILE_PATTERN = Pattern.compile("META-INF/[^/]+\\.(SF|DSA|RSA|EC)");
 
     public static void install(Path dir, LoaderVersion loaderVersion, String gameVersion, InstallerProgress progress) throws IOException {
         Path launchJar = dir.resolve(DEFAULT_LAUNCH_JAR_NAME);

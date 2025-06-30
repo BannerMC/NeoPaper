@@ -1,5 +1,3 @@
-package net.fabricmc.installer.util;
-
 /*
  * Copyright (c) 2016, 2017, 2018, 2019 FabricMC
  *
@@ -15,6 +13,9 @@ package net.fabricmc.installer.util;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+package net.fabricmc.installer.util;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -43,7 +44,7 @@ public class Utils {
         @Override
         public ResourceBundle newBundle(String baseName, Locale locale, String format, ClassLoader loader, boolean reload) throws IllegalAccessException, InstantiationException, IOException {
             final String bundleName = toBundleName(baseName, locale);
-            final String resourceName = toResourceName(bundleName, "properties");
+            final String resourceName = toResourceName(bundleName, "properties").toLowerCase(Locale.ROOT);
 
             try (InputStream stream = loader.getResourceAsStream(resourceName)) {
                 if (stream != null) {
@@ -101,14 +102,14 @@ public class Utils {
         int len;
 
         while ((len = is.read(data, offset, data.length - offset)) >= 0) {
-            offset = len;
+            offset += len;
 
             if (offset == data.length) {
                 int next = is.read();
                 if (next < 0) break;
 
                 data = Arrays.copyOf(data, data.length * 2);
-                data[offset] = (byte) next;
+                data[offset++] = (byte) next;
             }
         }
 
@@ -144,7 +145,7 @@ public class Utils {
         conn.connect();
 
         int responseCode = conn.getResponseCode();
-        if (responseCode < 200 || responseCode >= 300) throw new IOException("HTTP request to " + url +" failed: " + responseCode);
+        if (responseCode < 200 || responseCode >= 300) throw new IOException("HTTP request to "+url+" failed: "+responseCode);
 
         return conn.getInputStream();
     }
@@ -156,7 +157,7 @@ public class Utils {
             int len;
 
             while ((len = is.read(ret, offset, ret.length - offset)) != -1) {
-                offset = len;
+                offset += len;
                 if (offset == ret.length) ret = Arrays.copyOf(ret, ret.length * 2);
             }
 
@@ -238,7 +239,7 @@ public class Utils {
         String[] partsA = groupA.split("\\.");
         String[] partsB = groupB.split("\\.");
 
-        for (int i = 0; i < Math.min(partsA.length, partsB.length); ++i) {
+        for (int i = 0; i < Math.min(partsA.length, partsB.length); i++) {
             String partA = partsA[i];
             String partB = partsB[i];
 

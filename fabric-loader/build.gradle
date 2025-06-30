@@ -329,7 +329,7 @@ allprojects {
 
 	spotless {
 		java {
-			licenseHeaderFile(rootProject.file("HEADER"))
+			licenseHeaderFile(project(":fabric-loader").file("HEADER"))
 			targetExclude '**/lib/gson/*.java'
 		}
 	}

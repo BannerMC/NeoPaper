@@ -1,5 +1,3 @@
-package net.fabricmc.installer.util;
-
 /*
  * Copyright (c) 2016, 2017, 2018, 2019 FabricMC
  *
@@ -15,6 +13,8 @@ package net.fabricmc.installer.util;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+package net.fabricmc.installer.util;
 
 import java.io.IOException;
 import java.net.URL;
@@ -81,7 +81,7 @@ public final class FabricService {
 
                 return ret;
             } catch (IOException e) {
-                System.out.println("service " + service + " failed: " + e);
+                System.out.println("service "+service+" failed: "+e);
 
                 if (exc == null) {
                     exc = e;
@@ -128,8 +128,8 @@ public final class FabricService {
 
     @Override
     public String toString() {
-        return "FabricService{" +
-        "meta='" + meta + '\'' +
-        ", maven='" + maven + "'}";
+        return "FabricService{"
+            + "meta='" + meta + '\''
+            + ", maven='" + maven + "'}";
     }
 }

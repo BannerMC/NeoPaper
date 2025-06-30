@@ -33,12 +33,11 @@ if (!file(".git").exists()) {
 
 rootProject.name = "paper"
 
-for (name in listOf("paper-api", "paper-server", "paperclip", "paperclip:java17", "fabric-loader", "fabric-loader:minecraft", "fabric-loader:junit")) {
+for (name in listOf("paper-api", "paper-server", "paperclip", "paperclip:java17", "fabric-loader", "fabric-loader:minecraft")) {
     include(name)
     file(name).mkdirs()
 }
 
-optionalInclude("test-plugin")
 optionalInclude("paper-generator")
 
 fun optionalInclude(name: String, op: (ProjectDescriptor.() -> Unit)? = null) {

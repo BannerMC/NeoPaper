@@ -16,10 +16,10 @@
 
 package net.fabricmc.installer.util;
 
-import mjson.Json;
-
 import java.io.File;
 import java.nio.file.Path;
+
+import mjson.Json;
 
 public class Library {
     public final String name;

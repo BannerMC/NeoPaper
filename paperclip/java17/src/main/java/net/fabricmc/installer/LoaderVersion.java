@@ -25,6 +25,7 @@ import java.util.zip.ZipError;
 import java.util.zip.ZipFile;
 
 import mjson.Json;
+
 import net.fabricmc.installer.util.Utils;
 
 public final class LoaderVersion {
