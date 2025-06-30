@@ -75,7 +75,7 @@ public class MappingsUtil {
                 intermediarySet
             ).merge();
             TinyMappingFormat.TINY.write(merge.reverse(), intermediaryToSpigotMaps, "intermediary", "spigot");
-            System.setProperty("toki.mappings", intermediaryToSpigotMaps.toAbsolutePath().toString()); // Used in fabric loader in IntermediarySpigotMappings.
+            System.setProperty("banner.mappings", intermediaryToSpigotMaps.toAbsolutePath().toString()); // Used in fabric loader in IntermediarySpigotMappings.
         } catch (final IOException e) {
             throw new RuntimeException("Failed to merge intermediary with spigot mappings: ", e);
         }

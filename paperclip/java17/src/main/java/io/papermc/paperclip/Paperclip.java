@@ -32,7 +32,7 @@ public final class Paperclip {
         FabricInstaller.LaunchData launchData = FabricInstaller.initialize(); // Banner
         final URL[] classpathUrls = setupClasspath();
         FabricInstaller.setLibraryURLs(classpathUrls); // Banner
-        FabricInstaller.setupRemappingClasspath(classpathUrls, launchData); // Banner
+        //FabricInstaller.setupRemappingClasspath(classpathUrls, launchData); // Banner
         final URLClassLoader classLoader = FabricInstaller.createFabricLoaderClassLoader(launchData); // Banner
 
         final String mainClassName = findMainClass();
