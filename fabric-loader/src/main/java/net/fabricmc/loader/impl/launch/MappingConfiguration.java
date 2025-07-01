@@ -178,7 +178,7 @@ public final class MappingConfiguration {
 
 	@Nullable
 	private URLConnection openMappings() {
-		URL url = MappingConfiguration.class.getClassLoader().getResource("mappings/mappings.tiny");
+		URL url = MappingConfiguration.class.getClassLoader().getResource("deobf_mappings/deobf_mappings.tiny");
 
 		if (url != null) {
 			try {
