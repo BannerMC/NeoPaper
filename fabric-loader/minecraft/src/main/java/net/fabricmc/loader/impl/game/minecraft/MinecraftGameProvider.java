@@ -320,14 +320,15 @@ public class MinecraftGameProvider implements GameProvider {
 				obfJars.put("realms", realmsJar);
 			}
 
-			String sourceNamespace = "official";
+			String sourceNamespace = "named";
 
 			MappingConfiguration mappingConfig = launcher.getMappingConfiguration();
 			List<String> mappingNamespaces = mappingConfig.getNamespaces();
 
+			/*
 			if (mappingNamespaces != null && !mappingNamespaces.contains(sourceNamespace)) {
 				sourceNamespace = envType == EnvType.CLIENT ? "clientOfficial" : "serverOfficial";
-			}
+			}*/
 
 			obfJars = GameProviderHelper.deobfuscate(obfJars,
 					getGameId(), getNormalizedGameVersion(),

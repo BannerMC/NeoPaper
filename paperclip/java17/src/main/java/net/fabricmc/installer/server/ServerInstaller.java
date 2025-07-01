@@ -89,7 +89,7 @@ public class ServerInstaller {
             mainClassMeta = json.at("mainClass").asString();
         } else { // loader jar available, generate library list from it
             libraries.add(new Library(String.format("net.fabricmc:fabric-loader:%s", loaderVersion.name), null, loaderVersion.path));
-            libraries.add(new Library(String.format("net.fabricmc:intermediary:%s", gameVersion), "https://maven.fabricmc.net/", null));
+            //libraries.add(new Library(String.format("net.fabricmc:intermediary:%s", gameVersion), "https://maven.fabricmc.net/", null));//Banner - disabled
 
             try (ZipFile zf = new ZipFile(loaderVersion.path.toFile())) {
                 ZipEntry entry = zf.getEntry("fabric-installer.json");
