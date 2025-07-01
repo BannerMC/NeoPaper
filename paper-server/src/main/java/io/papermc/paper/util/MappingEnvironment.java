@@ -61,6 +61,8 @@ public final class MappingEnvironment {
             return false;
         } else if (clazz.getSimpleName().equals("EnumCreatureType")) {
             return true;
+        } else if (clazz.getSimpleName().equals("class_1311")) {
+            return false;
         }
         throw new IllegalStateException();
     }
