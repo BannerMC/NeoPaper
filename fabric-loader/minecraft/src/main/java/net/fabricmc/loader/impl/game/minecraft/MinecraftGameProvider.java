@@ -323,9 +323,10 @@ public class MinecraftGameProvider implements GameProvider {
 			String sourceNamespace = "named";
 
 			MappingConfiguration mappingConfig = launcher.getMappingConfiguration();
+			/*
 			List<String> mappingNamespaces = mappingConfig.getNamespaces();
 
-			/*
+
 			if (mappingNamespaces != null && !mappingNamespaces.contains(sourceNamespace)) {
 				sourceNamespace = envType == EnvType.CLIENT ? "clientOfficial" : "serverOfficial";
 			}*/
