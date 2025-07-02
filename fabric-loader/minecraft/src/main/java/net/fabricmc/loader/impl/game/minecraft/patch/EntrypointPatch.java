@@ -97,7 +97,7 @@ public class EntrypointPatch extends GamePatch {
 			// pre-1.6 route
 			List<FieldNode> newGameFields = findFields(mainClass,
 					(f) -> !isStatic(f.access) && f.desc.startsWith("L") && !f.desc.startsWith("Ljava/")
-					);
+			);
 
 			if (newGameFields.size() == 1) {
 				gameEntrypoint = Type.getType(newGameFields.get(0).desc).getClassName();
@@ -106,7 +106,7 @@ public class EntrypointPatch extends GamePatch {
 
 		if (gameEntrypoint == null) {
 			// main method searches
-			MethodNode mainMethod = findMethod(mainClass, (method) -> method.name.equals("main") && method.desc.equals("(Ljoptsimple/OptionSet;)V") && isPublicStatic(method.access)); // Banner - change main method
+			MethodNode mainMethod = findMethod(mainClass, (method) -> method.name.equals("main") && method.desc.equals("([Ljava/lang/String;)V") && isPublicStatic(method.access));
 
 			if (mainMethod == null) {
 				throw new RuntimeException("Could not find main method in " + entrypoint + "!");
@@ -141,7 +141,7 @@ public class EntrypointPatch extends GamePatch {
 				MethodInsnNode newGameInsn = (MethodInsnNode) findInsn(mainMethod,
 						(insn) -> insn.getOpcode() == Opcodes.INVOKESPECIAL && ((MethodInsnNode) insn).name.equals("<init>") && ((MethodInsnNode) insn).owner.equals(mainClass.name),
 						false
-						);
+				);
 
 				if (newGameInsn != null) {
 					gameEntrypoint = newGameInsn.owner.replace('/', '.');
@@ -153,10 +153,10 @@ public class EntrypointPatch extends GamePatch {
 				// modern method search routes
 				MethodInsnNode newGameInsn = (MethodInsnNode) findInsn(mainMethod,
 						type == EnvType.CLIENT
-						? (insn) -> (insn.getOpcode() == Opcodes.INVOKESPECIAL || insn.getOpcode() == Opcodes.INVOKEVIRTUAL) && !((MethodInsnNode) insn).owner.startsWith("java/")
+								? (insn) -> (insn.getOpcode() == Opcodes.INVOKESPECIAL || insn.getOpcode() == Opcodes.INVOKEVIRTUAL) && !((MethodInsnNode) insn).owner.startsWith("java/")
 								: (insn) -> insn.getOpcode() == Opcodes.INVOKESPECIAL && ((MethodInsnNode) insn).name.equals("<init>") && hasSuperClass(((MethodInsnNode) insn).owner, mainClass.name, classSource),
-								true
-						);
+						true
+				);
 
 				// New 20w20b way of finding the server constructor
 				if (newGameInsn == null && type == EnvType.SERVER) {
@@ -253,7 +253,7 @@ public class EntrypointPatch extends GamePatch {
 				}
 			}
 		} else {
-			gameMethod = findMethod(mainClass, (method) -> method.name.equals("main") && method.desc.equals("(Ljoptsimple/OptionSet;)V") && isPublicStatic(method.access)); // Banner - change main method
+			gameMethod = findMethod(mainClass, (method) -> method.name.equals("main") && method.desc.equals("([Ljava/lang/String;)V") && isPublicStatic(method.access));
 		}
 
 		if (gameMethod == null) {
@@ -305,7 +305,7 @@ public class EntrypointPatch extends GamePatch {
 				// If we do not find this, then we are certain this is 20w22a.
 				MethodNode serverStartMethod = findMethod(mainClass, method -> {
 					if ((method.access & Opcodes.ACC_SYNTHETIC) == 0 // reject non-synthetic
-							|| method.name.equals("main") && method.desc.equals("(Ljoptsimple/OptionSet;)V") // reject main method (theoretically superfluous now)
+							|| method.name.equals("main") && method.desc.equals("([Ljava/lang/String;)V") // reject main method (theoretically superfluous now)
 							|| VERSION_25w14craftmine.test(gameVersion) && method.parameters.size() < 10) { // reject problematic extra methods
 						return false;
 					}
@@ -396,8 +396,7 @@ public class EntrypointPatch extends GamePatch {
 								return false;
 							}
 
-							return constructorType.getArgumentTypes()[0].getDescriptor().equals("Ljoptsimple/OptionSet;") && constructorType.getArgumentTypes()[2].getDescriptor().equals("Ljava/lang/Thread;")
-									|| constructorType.getArgumentTypes()[0].getDescriptor().equals("Ljoptsimple/OptionSet;") && constructorType.getArgumentTypes()[3].getDescriptor().equals("Ljava/lang/Thread;");
+							return constructorType.getArgumentTypes()[0].getDescriptor().equals("Ljava/lang/Thread;");
 						}
 
 						return false;
