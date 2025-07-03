@@ -13,7 +13,6 @@ import java.net.URLClassLoader;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,43 +23,20 @@ public final class Paperclip {
 
     @SuppressWarnings("all")
     public static void main(final String[] args) {
-        if (Path.of("").toAbsolutePath().toString().contains("!")) {
-            System.err.println("Paperclip may not run in a directory containing '!'. Please rename the affected folder.");
-            System.exit(1);
-        }
-
         FabricInstaller.LaunchData launchData = FabricInstaller.initialize(); // Banner
         final URL[] classpathUrls = setupClasspath();
         FabricInstaller.setLibraryURLs(classpathUrls); // Banner
-        //FabricInstaller.setupRemappingClasspath(classpathUrls, launchData); // Banner
         final URLClassLoader classLoader = FabricInstaller.createFabricLoaderClassLoader(launchData); // Banner
+        //System.out.println("Starting " + launchData.mainClass());// Banner - implement fabric loader
 
-        final String mainClassName = findMainClass();
-        System.setProperty("banner.entrypoint", mainClassName); // Banner - Used in fabric loader in MinecraftGameProvider#launch
-        System.out.println("Starting " + launchData.mainClass());// Banner - implement fabric loader
-
-        final Thread runThread = new Thread(() -> {
-            try {
-                // Banner start
-                Class<?> fabricLoaderMain = Class.forName(launchData.mainClass(), true, classLoader);
-                // Launches FabricLoader
-                final MethodHandle handle = MethodHandles.lookup()
-                    .findStatic(fabricLoaderMain, "main", MethodType.methodType(void.class, String[].class))
-                    .asFixedArity();
-                // Banner end
-                handle.invokeExact((String[])args);
-                /*
-                final Class<?> mainClass = Class.forName(mainClassName, true, classLoader);
-                final MethodHandle mainHandle = MethodHandles.lookup()
-                    .findStatic(mainClass, "main", MethodType.methodType(void.class, String[].class))
-                    .asFixedArity();
-                mainHandle.invoke((Object) args);*/
-            } catch (final Throwable t) {
-                throw Util.sneakyThrow(t);
-            }
-        }, "ServerMain");
-        runThread.setContextClassLoader(classLoader);
-        runThread.start();
+        // Banner start - Launches FabricLoader
+        try {
+            MethodHandle handle = MethodHandles.publicLookup().findStatic(classLoader.loadClass(launchData.mainClass()), "main", MethodType.methodType(void.class, String[].class));
+            handle.invokeExact(args);
+        } catch (Throwable e) {
+            throw new RuntimeException(e);
+        }
+        // Banner end
     }
 
     private static URL[] setupClasspath() {
@@ -155,6 +131,8 @@ public final class Paperclip {
     }
 
     private static String findMainClass() {
+        return "net.fabricmc.loader.impl.launch.knot.KnotServer";
+        /*
         final String mainClassName = System.getProperty("bundlerMainClass");
         if (mainClassName != null) {
             return mainClassName;
@@ -164,7 +142,7 @@ public final class Paperclip {
             return Util.readResourceText("/META-INF/main-class");
         } catch (final IOException e) {
             throw Util.fail("Failed to read main-class file", e);
-        }
+        }*/
     }
 
     private static Map<String, Map<String, URL>> extractAndApplyPatches(final Path originalJar, final PatchEntry[] patches, final Path repoDir) {
