@@ -19,3 +19,4 @@ if (!JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_17)) {
 }
 
 include "junit"
+include "java17"
