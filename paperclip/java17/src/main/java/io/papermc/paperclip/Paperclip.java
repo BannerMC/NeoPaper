@@ -29,14 +29,20 @@ public final class Paperclip {
         final URLClassLoader classLoader = FabricInstaller.createFabricLoaderClassLoader(launchData); // Banner
         //System.out.println("Starting " + launchData.mainClass());// Banner - implement fabric loader
 
-        // Banner start - Launches FabricLoader
-        try {
-            MethodHandle handle = MethodHandles.publicLookup().findStatic(classLoader.loadClass(launchData.mainClass()), "main", MethodType.methodType(void.class, String[].class));
-            handle.invokeExact(args);
-        } catch (Throwable e) {
-            throw new RuntimeException(e);
-        }
-        // Banner end
+        final Thread runThread = new Thread(() -> {
+            try {
+                // Banner start
+                Class<?> fabricLoaderMain = classLoader.loadClass(launchData.mainClass());
+                // Launches FabricLoader
+                final MethodHandle handle = MethodHandles.publicLookup().findStatic(fabricLoaderMain, "main", MethodType.methodType(void.class, String[].class));
+                // Banner end
+                handle.invokeExact(args);
+            } catch (final Throwable t) {
+                throw Util.sneakyThrow(t);
+            }
+        }, "ServerMain");
+        runThread.setContextClassLoader(classLoader);
+        runThread.start();
     }
 
     private static URL[] setupClasspath() {
@@ -128,21 +134,6 @@ public final class Paperclip {
         } catch (final IOException e) {
             throw Util.fail("Failed to read " + fileName + " file", e);
         }
-    }
-
-    private static String findMainClass() {
-        return "net.fabricmc.loader.impl.launch.knot.KnotServer";
-        /*
-        final String mainClassName = System.getProperty("bundlerMainClass");
-        if (mainClassName != null) {
-            return mainClassName;
-        }
-
-        try {
-            return Util.readResourceText("/META-INF/main-class");
-        } catch (final IOException e) {
-            throw Util.fail("Failed to read main-class file", e);
-        }*/
     }
 
     private static Map<String, Map<String, URL>> extractAndApplyPatches(final Path originalJar, final PatchEntry[] patches, final Path repoDir) {
