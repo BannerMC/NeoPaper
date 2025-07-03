@@ -206,10 +206,13 @@ tasks.register('fatJar', ShadowJar) {
 	exclude 'META-INF/*.RSA'
 	exclude 'META-INF/*.SF'
 
-	/*
+
+	def devFiles = project.configurations.development.files
+	def outputFile = archiveFile.get().asFile
+
 	doLast {
-		JarNester.nestJars(project.configurations.development.files, archiveFile.get().asFile, LoggerFactory.getLogger("JiJ"))
-	}*/
+		JarNester.nestJars(devFiles, outputFile, LoggerFactory.getLogger("JiJ"))
+	}
 
 	outputs.upToDateWhen { false }
 }

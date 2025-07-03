@@ -27,7 +27,7 @@ public final class Paperclip {
         final URL[] classpathUrls = setupClasspath();
         FabricInstaller.setLibraryURLs(classpathUrls); // Banner
         final URLClassLoader classLoader = FabricInstaller.createFabricLoaderClassLoader(launchData); // Banner
-        //System.out.println("Starting " + launchData.mainClass());// Banner - implement fabric loader
+        System.out.println("Starting " + launchData.mainClass());// Banner - implement fabric loader
 
         final Thread runThread = new Thread(() -> {
             try {
