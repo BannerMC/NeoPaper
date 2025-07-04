@@ -200,19 +200,8 @@ public final class FabricInstaller {
 
     public static URLClassLoader createFabricLoaderClassLoader(LaunchData launchData) {
         try {
-            final ClassLoader parentClassLoader = Paperclip.class.getClassLoader().getParent();
             URL[] urls = {launchData.launchJar().toUri().toURL()};
-            URLClassLoader classLoader = new URLClassLoader(urls, parentClassLoader) {
-                @Override
-                protected Class<?> findClass(final String name) throws ClassNotFoundException {
-                    /*
-                    if (name.startsWith("org.objectweb.asm.tree.ClassNode")) {
-                        return null;
-                    }*/
-                    return super.findClass(name);
-                }
-            };
-            return classLoader;
+            return new URLClassLoader(urls);
         } catch (final MalformedURLException e) {
             throw new IllegalStateException("Something went wrong in transforming URL while creating FabricLoader class loader: ", e);
         }

@@ -116,6 +116,17 @@ final class KnotClassLoader extends AbstractSecureClassLoader implements ClassLo
 
 	@Override
 	protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
+		// Taiyitist Start - fix asm loading
+		synchronized (getClassLoadingLock(name)) {
+			if (name.startsWith("org.objectweb.asm")) {
+				try {
+					return ClassLoader.getSystemClassLoader().loadClass(name);
+				} catch (ClassNotFoundException e) {
+					return findClass(name);
+				}
+			}
+		}
+		// Taiyitist end
 		return delegate.loadClass(name, resolve);
 	}
 

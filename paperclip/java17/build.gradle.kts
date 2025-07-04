@@ -36,6 +36,7 @@ tasks.shadowJar {
 
     exclude("META-INF/LICENSE.txt")
     exclude("META-INF/NOTICE.txt")
+    relocate("org.objectweb.asm", "com.taiyitistmc.shadowed.asm")
 }
 
 tasks.processResources {
