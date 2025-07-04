@@ -460,10 +460,13 @@ public class MinecraftGameProvider implements GameProvider {
 		for (Path lib : miscGameLibraries) {
 			launcher.addToClassPath(lib);
 		}
-		Json.read(System.getProperty("banner.libraries")).asJsonList().stream().map(Json::asString).forEach(string -> {
-			final Path libPath = Paths.get(string);
-			launcher.addToClassPath(libPath);
-		});
+		Json.read(System.getProperty("banner.libraries")).asJsonList().stream()
+				.map(Json::asString)
+				.filter(path -> !path.toLowerCase().contains("asm")) // 排除包含"asm"的路径
+				.forEach(string -> {
+					final Path libPath = Paths.get(string);
+					launcher.addToClassPath(libPath);
+				});
 	}
 
 	@Override
